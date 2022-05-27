@@ -1,6 +1,7 @@
-class CoursesController < ApplicationController
+# frozen_string_literal: true
 
-  before_action :find_course, only: [:show, :edit, :update, :destroy]
+class CoursesController < ApplicationController
+  before_action :find_course, only: %i[show edit update destroy]
 
   def index
     @courses = Course.all

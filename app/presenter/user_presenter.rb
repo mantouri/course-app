@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserPresenter
   include Enumerable
 
@@ -13,9 +15,9 @@ class UserPresenter
 
   def format(user)
     {
-      name:         user.name,
-      email:        user.email,
-      phone_number: user.phone,
+      name: user.name,
+      email: user.email,
+      phone_number: user.phone
     }
   end
 

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :course do
-    title { "Course Name" }
-    description { "Description." }
+    title { 'Course Name' }
+    description { 'Description.' }
   end
 end
