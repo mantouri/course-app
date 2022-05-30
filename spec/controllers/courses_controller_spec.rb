@@ -66,45 +66,47 @@ RSpec.describe CoursesController do
     end
   end
 
-  describe 'POST create' do
-    context "when course doesn't have a title" do
-      let(:user) { create(:user) }
-      before { sign_in user }
-
+  describe "POST create" do
+    let(:user) { create(:user) } 
+    before { sign_in user } 
+  
+    context "when course doesn't have title" do
       it "doesn't create a record" do
         expect do
-          post :create, params: { course: { description: 'bar' } }
+          post :create, params: { course: { :description => "bar" }}
         end.to change { Course.count }.by(0)
       end
-
-      it 'render new template' do
-        post :create, params: { course: { description: 'bar' } }
-
-        expect(response).to render_template('new')
-      end
-
-      it "creates a course for user" do
-        course = build(:course)
-        post :create, params: { course: attributes_for(:course) }
-        expect(Course.last.user).to eq(user)
+  
+      it "render new template" do
+        post :create, params: { course: { :description => "bar" } }
+  
+        expect(response).to render_template("new")
       end
     end
-
-    context 'when course have a title ' do
-      it 'create a new course record' do
+  
+    context "when course has title" do
+      it "create a new course record" do
         course = build(:course)
-
+  
         expect do
           post :create, params: { course: attributes_for(:course) }
         end.to change { Course.count }.by(1)
       end
-
-      it 'redirects to courses_path when course has title' do
+  
+      it "redirects to courses_path" do
         course = build(:course)
-
-        post :create, params: { course: attributes_for(:course) }
-
+  
+        post :create, params:{ course: attributes_for(:course) }
+  
         expect(response).to redirect_to courses_path
+      end
+
+      it "creates a course for user" do
+        course = build(:course)
+  
+        post :create, params: { course: attributes_for(:course) }
+  
+        expect(Course.last.user).to eq(user)
       end
     end
   end

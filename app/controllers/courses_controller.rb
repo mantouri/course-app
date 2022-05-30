@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CoursesController < ApplicationController
-  before_action :authenticate_user!, only: [:new]
+  before_action :authenticate_user!, only: [:new, :create]
   before_action :find_course, only: %i[show edit update destroy]
 
   def index
@@ -15,7 +15,7 @@ class CoursesController < ApplicationController
   end
 
   def create
-    @course = Course.new(course_params)
+    @course = current_user.courses.new(course_params)
     if @course.save
       redirect_to courses_path
     else
