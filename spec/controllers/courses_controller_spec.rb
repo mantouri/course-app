@@ -45,15 +45,15 @@ RSpec.describe CoursesController do
     context "when user login" do
       let(:user) { create(:user) } #same as @_user ||= create(:user)
       let(:course) { build(:course) }
-      it 'assign @course' do
+      before do
         sign_in user
         get :new
+      end
+      it 'assign @course' do
         expect(assigns(:course)).to be_a_new(Course)
       end
   
       it 'render template' do
-        sign_in user
-        get :new
         expect(response).to render_template("new")
       end
     end
@@ -68,6 +68,9 @@ RSpec.describe CoursesController do
 
   describe 'POST create' do
     context "when course doesn't have a title" do
+      let(:user) { create(:user) }
+      before { sign_in user }
+
       it "doesn't create a record" do
         expect do
           post :create, params: { course: { description: 'bar' } }
@@ -78,6 +81,12 @@ RSpec.describe CoursesController do
         post :create, params: { course: { description: 'bar' } }
 
         expect(response).to render_template('new')
+      end
+
+      it "creates a course for user" do
+        course = build(:course)
+        post :create, params: { course: attributes_for(:course) }
+        expect(Course.last.user).to eq(user)
       end
     end
 
