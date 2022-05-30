@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class CoursesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
-  before_action :find_course, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[new create edit]
+  before_action :find_course, only: %i[show update destroy]
 
   def index
     @courses = Course.all
@@ -23,7 +23,9 @@ class CoursesController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @course = current_user.courses.find(params[:id])
+  end
 
   def update
     if @course.update(course_params)

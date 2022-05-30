@@ -19,7 +19,7 @@ RSpec.describe CoursesController do
       course1 = create(:course)
       course2 = create(:course)
       get :index
-      expect(response).to render_template('index')
+      expect(response).to render_template('index') # expect(x) == 值用小括號
     end
   end
 
@@ -42,8 +42,8 @@ RSpec.describe CoursesController do
   end
 
   describe 'GET new' do
-    context "when user login" do
-      let(:user) { create(:user) } #same as @_user ||= create(:user)
+    context 'when user login' do
+      let(:user) { create(:user) } # same as @_user ||= create(:user)
       let(:course) { build(:course) }
       before do
         sign_in user
@@ -52,80 +52,93 @@ RSpec.describe CoursesController do
       it 'assign @course' do
         expect(assigns(:course)).to be_a_new(Course)
       end
-  
+
       it 'render template' do
-        expect(response).to render_template("new")
+        expect(response).to render_template('new')
       end
     end
 
-    context "when user not login" do
-      it "redirect_to new_user_session_path" do
+    context 'when user not login' do
+      it 'redirect_to new_user_session_path' do
         get :new
         expect(response).to redirect_to new_user_session_path
       end
     end
   end
 
-  describe "POST create" do
-    let(:user) { create(:user) } 
-    before { sign_in user } 
-  
+  describe 'POST create' do
+    let(:user) { create(:user) }
+    before { sign_in user }
+
     context "when course doesn't have title" do
       it "doesn't create a record" do
         expect do
-          post :create, params: { course: { :description => "bar" }}
+          post :create, params: { course: { description: 'bar' } }
         end.to change { Course.count }.by(0)
       end
-  
-      it "render new template" do
-        post :create, params: { course: { :description => "bar" } }
-  
-        expect(response).to render_template("new")
+
+      it 'render new template' do
+        post :create, params: { course: { description: 'bar' } }
+
+        expect(response).to render_template('new')
       end
     end
-  
-    context "when course has title" do
-      it "create a new course record" do
+
+    context 'when course has title' do
+      it 'create a new course record' do
         course = build(:course)
-  
+
         expect do
           post :create, params: { course: attributes_for(:course) }
         end.to change { Course.count }.by(1)
       end
-  
-      it "redirects to courses_path" do
+
+      it 'redirects to courses_path' do
         course = build(:course)
-  
-        post :create, params:{ course: attributes_for(:course) }
-  
+
+        post :create, params: { course: attributes_for(:course) }
+
         expect(response).to redirect_to courses_path
       end
 
-      it "creates a course for user" do
+      it 'creates a course for user' do
         course = build(:course)
-  
+
         post :create, params: { course: attributes_for(:course) }
-  
+
         expect(Course.last.user).to eq(user)
       end
     end
   end
 
   describe 'GET edit' do
-    it 'assign course' do
-      course = create(:course)
+    let(:author) { create(:user) }
+    let(:not_author) { create(:user) }
 
-      get :edit, params: { id: course.id }
+    context 'signed in as author' do
+      before { sign_in author }
 
-      expect(assigns[:course]).to eq(course)
+      it 'assign course' do
+        course = create(:course, user: author)
+        get :edit, params: { id: course.id }
+        expect(assigns[:course]).to eq(course)
+      end
+
+      it 'render template' do
+        course = create(:course, user: author)
+        get :edit, params: { id: course.id }
+        expect(response).to render_template('edit')
+      end
     end
 
-    it 'render template' do
-      course = create(:course)
-
-      get :edit, params: { id: course.id }
-
-      expect(response).to render_template('edit')
+    context 'signed in not as author' do
+      before { sign_in not_author }
+      it 'raises an error' do
+        course = create(:course, user: author)
+        expect do
+          get :edit, params: { id: course.id }
+        end.to raise_error ActiveRecord::RecordNotFound # expect 方法用 { xxx }
+      end
     end
   end
 
