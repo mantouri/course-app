@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class CoursesController < ApplicationController
+  before_action :authenticate_user!, only: [:new]
   before_action :find_course, only: %i[show edit update destroy]
 
   def index
