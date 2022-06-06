@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class CoursesController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create edit]
-  before_action :find_course, only: %i[show update destroy]
+  before_action :authenticate_user!, only: %i[new create edit update]
+  before_action :find_course, only: %i[show destroy]
 
   def index
     @courses = Course.all
@@ -28,6 +28,7 @@ class CoursesController < ApplicationController
   end
 
   def update
+    @course = current_user.courses.find(params[:id])
     if @course.update(course_params)
       redirect_to course_path(@course)
     else
