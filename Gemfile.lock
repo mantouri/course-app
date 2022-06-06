@@ -100,6 +100,10 @@ GEM
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
     ffi (1.15.5)
+    formulaic (0.4.1)
+      activesupport
+      capybara
+      i18n
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.10.0)
@@ -267,6 +271,7 @@ DEPENDENCIES
   capybara (>= 3.26)
   devise
   factory_bot_rails
+  formulaic
   jbuilder (~> 2.7)
   jquery-rails
   listen (~> 3.3)
