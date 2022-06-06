@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 class CoursesController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create edit update]
-  before_action :find_course, only: %i[show destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
 
   def index
     @courses = Course.all
   end
 
-  def show; end
+  def show
+    @course = Course.find(params[:id])
+  end
 
   def new
     @course = Course.new
@@ -37,15 +38,12 @@ class CoursesController < ApplicationController
   end
 
   def destroy
+    @course = current_user.courses.find(params[:id])
     @course.destroy
     redirect_to courses_path
   end
 
   private
-
-  def find_course
-    @course = Course.find(params[:id])
-  end
 
   def course_params
     params.require(:course).permit(:title, :description)
