@@ -15,6 +15,9 @@ gem 'puma', '~> 5.0'
 gem 'devise'
 gem 'grape'
 gem 'grape-entity'
+gem 'grape-swagger'
+gem 'grape-swagger-rails'
+
 gem 'simple_form'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
