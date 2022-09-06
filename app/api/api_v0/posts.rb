@@ -34,6 +34,20 @@ module ApiV0
       end
     end
 
+    desc "Delete a post."
+    params do
+      requires :id, type: String, desc: 'Post ID.'
+    end
+    delete "/posts/:id" do
+      post = current_user.posts.find_by(id: params[:id])
+
+      if post.destroy
+        present post, with: ApiV0::Entities::Post
+      else
+        raise StandardError, $!
+      end
+    end
+
     desc "Create new post"
     params do
       requires :title, type: String
