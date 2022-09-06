@@ -8,7 +8,7 @@ module ApiV0
 
     version 'v0', using: :path # api/v0/
     mount Ping # api/v0/ping
-
+    mount Posts
     # 一般來說我們不會希望 private API 接口被任意調用，尤其是內部溝通的 API，又或是要區別哪一個使用者所進行的身份驗證。
     # 多半會使用自定義的 header 比方說 X-Api-Secret-Key 在請求時請發起方帶上正確的 token
     # before do
