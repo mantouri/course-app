@@ -13,6 +13,7 @@ gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 gem 'puma', '~> 5.0'
 
 gem 'devise'
+gem 'grape'
 gem 'simple_form'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
